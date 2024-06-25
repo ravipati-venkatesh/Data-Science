@@ -18,7 +18,7 @@ def train_test_data_split(df):
     return (X_train, X_test, y_train, y_test)
 
 
-def fit_models(X_train, y_train, model_name):
+def fit_models(X_train, y_train, model_name, vect_name):
     # Initialize models
     models = {
         'Logistic Regression': LogisticRegression(),
@@ -80,7 +80,7 @@ def fit_models(X_train, y_train, model_name):
     best_model = grid_search.best_estimator_
 
     # Save best model to file
-    model_filename = f'./Model/BestModels/best_{model_name.lower().replace(" ", "_")}_model.pkl'
+    model_filename = f'./Model/BestModels/best_{model_name.lower().replace(" ", "_")}_{vect_name}_model.pkl'
     joblib.dump(best_model, model_filename)
 
     print(f"Saved best {model_name} model to {model_filename}")
@@ -88,10 +88,10 @@ def fit_models(X_train, y_train, model_name):
 
 
 
-def predict_models_summary(X_test, y_test, model_name):
+def predict_models_summary(X_test, y_test, model_name, vect_name):
 
     # evaluate models
-    model_filename = f'./Model/BestModels/best_{model_name.lower().replace(" ", "_")}_model.pkl'
+    model_filename = f'./Model/BestModels/best_{model_name.lower().replace(" ", "_")}_{vect_name}_model.pkl'
     model = joblib.load(model_filename)
     y_pred = model.predict(X_test)
     accuracy = accuracy_score(y_test, y_pred)
