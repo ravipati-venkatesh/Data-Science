@@ -96,7 +96,7 @@ def pre_trained_word_embedding(df, model, review_column='review'):
 
     if model == "word2vec":
         # Train Word2Vec model
-        word2vec_model = KeyedVectors.load_word2vec_format('GoogleNews-vectors-negative300.bin.gz', binary=True)
+        word2vec_model = KeyedVectors.load_word2vec_format('../Data/Process/GoogleNews-vectors-negative300.bin.gz', binary=True)
 
         # Apply the function to each review for Word2Vec
         df['vector'] = df['tokens'].apply(lambda tokens: get_review_vector(word2vec_model, tokens))

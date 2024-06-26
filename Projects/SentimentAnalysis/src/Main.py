@@ -10,8 +10,8 @@ from multiprocessing import Pool, cpu_count
 import time
 
 # Add the src paths to sys.path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(os.getcwd()), "src", "Model")))
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(os.getcwd()), "src", "Features")))
+sys.path.append(os.path.abspath(os.path.join(os.getcwd(), "Model")))
+sys.path.append(os.path.abspath(os.path.join(os.getcwd(), "Features")))
 sys.path.append(os.path.abspath(os.path.join(os.getcwd(), "Data")))
 
 print(sys.path)
@@ -37,14 +37,14 @@ label_encoder = LabelEncoder()
 df['sentiment_encoded'] = label_encoder.fit_transform(df['sentiment'])
 
 vectorizer_dict = [
-    {'vectorizer': 'count', 'review_column': 'cleaned_review', 'pretrained': None},
-    {'vectorizer': 'tf-idf', 'review_column': 'cleaned_review', 'pretrained': None},
-    {'vectorizer': 'word2vec', 'review_column': 'cleaned_review', 'pretrained': False},
-    {'vectorizer': 'fasttext', 'review_column': 'cleaned_review', 'pretrained': False},
-    {'vectorizer': 'word2vec', 'review_column': 'cleaned_review', 'pretrained': True},
-    {'vectorizer': 'fasttext', 'review_column': 'cleaned_review', 'pretrained': True},
-    {'vectorizer': 'word2vec', 'review_column': 'review', 'pretrained': False},
-    {'vectorizer': 'fasttext', 'review_column': 'review', 'pretrained': False},
+#     {'vectorizer': 'count', 'review_column': 'cleaned_review', 'pretrained': None},
+#     {'vectorizer': 'tf-idf', 'review_column': 'cleaned_review', 'pretrained': None},
+#     {'vectorizer': 'word2vec', 'review_column': 'cleaned_review', 'pretrained': False},
+#     {'vectorizer': 'fasttext', 'review_column': 'cleaned_review', 'pretrained': False},
+#     {'vectorizer': 'word2vec', 'review_column': 'cleaned_review', 'pretrained': True},
+#     {'vectorizer': 'fasttext', 'review_column': 'cleaned_review', 'pretrained': True},
+#     {'vectorizer': 'word2vec', 'review_column': 'review', 'pretrained': False},
+#     {'vectorizer': 'fasttext', 'review_column': 'review', 'pretrained': False},
     {'vectorizer': 'word2vec', 'review_column': 'review', 'pretrained': True},
     {'vectorizer': 'fasttext', 'review_column': 'review', 'pretrained': True},
 ]
@@ -63,8 +63,8 @@ def process_combination(params):
     dic, model_name, df = params
     df_ = dp.vectorization(df, vectorizer=dic['vectorizer'], review_column=dic['review_column'], pretrained=dic['pretrained'])
     X_train, X_test, y_train, y_test = Models.train_test_data_split(df_)
-    Models.fit_models(X_train, y_train, model_name)
-    accuracy, precision, recall, f1 = Models.predict_models_summary(X_test, y_test, model_name)
+    Models.fit_models(X_train, y_train, model_name, dic['vectorizer'])
+    accuracy, precision, recall, f1 = Models.predict_models_summary(X_test, y_test, model_name, dic['vectorizer'])
     return dic['vectorizer'], model_name, accuracy, precision, recall, f1
 
 # Prepare parameters for multiprocessing
@@ -80,5 +80,7 @@ if __name__ == '__main__':
     df_summary = pd.DataFrame(results, columns=['vectorizer', 'model_name', 'accuracy', 'precision', 'recall', 'f1'])
 
     print("Done in:", time.time() - t)
-    print(df_summary)
+    summary_file_path = "../Data/Process/{models[0].replace(" ", "_")}.xlsx"
+#     print(df_summary)
+    df_summary.to_excel(summary_file_path, index=False)
 
