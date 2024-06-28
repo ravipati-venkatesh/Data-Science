@@ -10,7 +10,7 @@ from multiprocessing import Pool, cpu_count
 import time
 from sklearn.preprocessing import MinMaxScaler
 import gensim.downloader as api
-from gensim.models import KeyedVectors
+import gensim.models.fasttext as fasttext
 
 # Add the src paths to sys.path
 sys.path.append(os.path.abspath(os.path.join(os.getcwd(), "Model")))
@@ -69,22 +69,22 @@ vectorizer_dict = [
 #     {'vectorizer': 'word2vec', 'review_column': 'cleaned_review', 'pretrained': False},
 #     {'vectorizer': 'fasttext', 'review_column': 'cleaned_review', 'pretrained': False},
     {'vectorizer': 'word2vec', 'review_column': 'cleaned_review', 'pretrained': True},
-#     {'vectorizer': 'fasttext', 'review_column': 'cleaned_review', 'pretrained': True},
+    {'vectorizer': 'fasttext', 'review_column': 'cleaned_review', 'pretrained': True},
 #     {'vectorizer': 'word2vec', 'review_column': 'review', 'pretrained': False},
 #     {'vectorizer': 'fasttext', 'review_column': 'review', 'pretrained': False},
-    # {'vectorizer': 'word2vec', 'review_column': 'review', 'pretrained': True},
-    # {'vectorizer': 'fasttext', 'review_column': 'review', 'pretrained': True},
+    {'vectorizer': 'word2vec', 'review_column': 'review', 'pretrained': True},
+    {'vectorizer': 'fasttext', 'review_column': 'review', 'pretrained': True},
 ]
 
 
 # Run one model at a time
 models = list({
-    # 'Logistic Regression',
-    # 'Multinomial Naive Bayes',
+    'Logistic Regression',
+    'Multinomial Naive Bayes',
     'Decision Tree',
-#     'Random Forest',
-#     'SVC',
-#     'KNN'
+    'Random Forest',
+    'SVC',
+    'KNN'
 })
 
 # Function to process a single combination of vectorizer and model
@@ -99,7 +99,7 @@ def process_combination(params):
     else:
         model = None
         
-    df_ = dp.vectorization(df, vectorizer=dic['vectorizer'], review_column=dic['review_column'], pretrained=dic['pretrained'], model)
+    df_ = dp.vectorization(df, vectorizer=dic['vectorizer'], review_column=dic['review_column'], pretrained=dic['pretrained'], model=model)
     X_train, X_test, y_train, y_test = Models.train_test_data_split(df_)
 
     if model_name=='Multinomial Naive Bayes' and (dic['vectorizer']=='word2vec' or dic['vectorizer']=='fasttext'):
@@ -112,15 +112,17 @@ def process_combination(params):
     return dic['vectorizer'], model_name, accuracy, precision, recall, f1, dic['pretrained'], dic['review_column']
 
 
-# Load the pretrained Word2Vec and FastText models once
-word2vec_model = api.load('word2vec-google-news-300')
-fasttext_model = KeyedVectors.load('cc.en.300.bin')
-# Prepare parameters for multiprocessing
-params = [(dic, model_name, df, word2vec_model, fasttext_model) for dic in vectorizer_dict for model_name in models]
-
 # Use multiprocessing to process combinations
 if __name__ == '__main__':
     
+    # Load the pretrained Word2Vec and FastText models once
+    word2vec_model = api.load('word2vec-google-news-300')
+    fasttext_model = fasttext.load_facebook_vectors('cc.en.300.bin')
+    # Prepare parameters for multiprocessing
+    params = [(dic, model_name, df, word2vec_model, fasttext_model) for dic in vectorizer_dict for model_name in models]
+
+
+
     print(cpu_count())
     with Pool(cpu_count() - 1) as pool:
         results = pool.map(process_combination, params)
