@@ -78,8 +78,8 @@ def fit_models(X_train, y_train, model_name, vect_name):
 
 #     # Get best model
 #     best_model = grid_search.best_estimator_
-    model = models[model_name]
-    model.fit(X_train, y_train)
+    best_model = models[model_name]
+    best_model.fit(X_train, y_train)
     
     # Save best model to file
     model_filename = f'./Model/BestModels/best_{model_name.lower().replace(" ", "_")}_{vect_name}_model.pkl'
@@ -93,8 +93,8 @@ def fit_models(X_train, y_train, model_name, vect_name):
 def predict_models_summary(X_test, y_test, model_name, vect_name):
 
     # evaluate models
-#     model_filename = f'./Model/BestModels/best_{model_name.lower().replace(" ", "_")}_{vect_name}_model.pkl'
-#     model = joblib.load(model_filename)
+    model_filename = f'./Model/BestModels/best_{model_name.lower().replace(" ", "_")}_{vect_name}_model.pkl'
+    model = joblib.load(model_filename)
 
     y_pred = model.predict(X_test)
     accuracy = accuracy_score(y_test, y_pred)
