@@ -23,6 +23,30 @@ import LoadData as LD
 import DataPreProcessing as dp
 import Models
 
+
+
+import requests
+import shutil
+import gzip
+
+url = 'https://dl.fbaipublicfiles.com/fasttext/vectors-crawl/cc.en.300.bin.gz'
+target_file = 'cc.en.300.bin.gz'
+
+# Download the file
+with requests.get(url, stream=True) as r:
+    with open(target_file, 'wb') as f:
+        shutil.copyfileobj(r.raw, f)
+
+# Decompress the file if needed
+with gzip.open(target_file, 'rb') as f_in:
+    with open('cc.en.300.bin', 'wb') as f_out:
+        shutil.copyfileobj(f_in, f_out)
+
+# Remove the compressed file
+os.remove(target_file)
+
+
+
 # Data preprocessing
 processed_file_path = "../Data/Process/sample_preprocessed_data.xlsx"
 if not os.path.exists(processed_file_path):
@@ -67,6 +91,7 @@ models = list({
 def process_combination(params):
     dic, model_name, df, word2vec_model, fasttext_model = params
     t = time.time()
+    pretrained = dic['pretrained']
     if pretrained and dic['vectorizer']=='word2vec':
         model = word2vec_model
     elif pretrained and dic['vectorizer']=='fasttext':
