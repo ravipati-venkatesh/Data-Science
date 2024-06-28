@@ -94,25 +94,15 @@ def pre_trained_word_embedding(df, model, review_column='review'):
     # Apply tokenization to each review
     df['tokens'] = df[review_column].apply(preprocess)
 
-    if model == "word2vec":
-        # Train Word2Vec model
-        word2vec_model = KeyedVectors.load_word2vec_format('../Data/Process/GoogleNews-vectors-negative300.bin.gz', binary=True)
+    if model == "word2vec" or model == "fasttext":
 
         # Apply the function to each review for Word2Vec
-        df['vector'] = df['tokens'].apply(lambda tokens: get_review_vector(word2vec_model, tokens))
-        
-    if model == "fasttext":
-
-        # Train FastText model
-        fasttext_model = KeyedVectors.load('cc.en.300.bin')
-
-        # Apply the function to each review for FastText
-        df['vector'] = df['tokens'].apply(lambda tokens: get_review_vector(fasttext_model, tokens))
+        df['vector'] = df['tokens'].apply(lambda tokens: get_review_vector(model, tokens))
 
     return df[['review', 'vector', 'sentiment_encoded']]
 
 
-def vectorization(df, vectorizer, review_column='cleaned_review', pretrained=False):
+def vectorization(df, vectorizer, review_column='cleaned_review', pretrained=False, model=None):
 
     if vectorizer == 'tf-idf':
         # Create TfidfVectorizer instance
@@ -122,7 +112,7 @@ def vectorization(df, vectorizer, review_column='cleaned_review', pretrained=Fal
         vectorizer_model = CountVectorizer()
     else:
         if pretrained:
-            return pre_trained_word_embedding(df, model=vectorizer, review_column=review_column)
+            return pre_trained_word_embedding(df, model, review_column=review_column)
         else:
             return word_embedding(df, model=vectorizer, review_column=review_column)
 
