@@ -79,12 +79,12 @@ vectorizer_dict = [
 
 # Run one model at a time
 models = list({
-    'Logistic Regression',
+#     'Logistic Regression',
     'Multinomial Naive Bayes',
     'Decision Tree',
-    'Random Forest',
-    'SVC',
-    'KNN'
+#     'Random Forest',
+#     'SVC',
+#     'KNN'
 })
 
 # Function to process a single combination of vectorizer and model

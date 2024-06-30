@@ -11,9 +11,7 @@ from tensorflow.keras.layers import Embedding, LSTM, GRU, RNN, Dense, BatchNorma
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
-
-
-# In[66]:
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
 
 def preprocess_data(df):
@@ -24,14 +22,11 @@ def preprocess_data(df):
     tokenizer.fit_on_texts(X_train.values)
     X_train_seq = tokenizer.texts_to_sequences(X_train.values)
     X_test_seq = tokenizer.texts_to_sequences(X_test.values)
-    maxlen = max([item for sublist in X_train_seq for item in sublist])
+    maxlen = max([len(sublist) for sublist in X_train_seq])
     # Pad the sequences to the same length
     X_train_pad = pad_sequences(X_train_seq, maxlen=maxlen)
     X_test_pad = pad_sequences(X_test_seq, maxlen=maxlen)
     return X_train_pad, X_test_pad, y_train, y_test, label_encoder, maxlen
-
-
-# In[67]:
 
 
 def model_def_and_compile(model_name, maxlen):
@@ -42,11 +37,11 @@ def model_def_and_compile(model_name, maxlen):
     model.add(BatchNormalization())
     
     if model_name == "LSTM":
-        model.add(LSTM(200, dropout=0.2, recurrent_dropout=0.2, return_sequences=False))
+        model.add(LSTM(100, dropout=0.2, recurrent_dropout=0.2, return_sequences=False))
     elif model_name == "GRU":
-        model.add(GRU(200, dropout=0.2, recurrent_dropout=0.2, return_sequences=False))
+        model.add(GRU(100, dropout=0.2, recurrent_dropout=0.2, return_sequences=False))
     elif model_name == "RNN":
-        model.add(SimpleRNN(200, dropout=0.2, recurrent_dropout=0.2, return_sequences=False))
+        model.add(SimpleRNN(100, dropout=0.2, recurrent_dropout=0.2, return_sequences=False))
         
     model.add(BatchNormalization())
     model.add(Dense(1, activation='sigmoid'))
@@ -55,9 +50,6 @@ def model_def_and_compile(model_name, maxlen):
     model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
     
     return model
-
-
-# In[68]:
 
 
 def predict_sentiment(model, X_test_pad, y_test):
@@ -71,11 +63,7 @@ def predict_sentiment(model, X_test_pad, y_test):
     return accuracy, precision, recall, f1
 
 
-# In[ ]:
-
-
 model_names = ['LSTM', 'RNN', 'GRU']
-
 if __name__ == '__main__':
     
     # preprocessing  Data path
@@ -88,7 +76,6 @@ if __name__ == '__main__':
     results = []
     for model_name in model_names:
         model = model_def_and_compile(model_name, maxlen)
-        print(maxlen)
         # Train the model
         model.fit(X_train_pad, y_train, epochs=5, batch_size=32)
         
@@ -98,12 +85,4 @@ if __name__ == '__main__':
     df_summary = pd.DataFrame(results, columns=['model_name', 'accuracy', 'precision', 'recall', 'f1'])
     summary_file_path = f'../Data/Process/deep_learning.xlsx'
     df_summary.to_excel(summary_file_path, index=False)
-        
-    
-
-
-# In[ ]:
-
-
-
 
