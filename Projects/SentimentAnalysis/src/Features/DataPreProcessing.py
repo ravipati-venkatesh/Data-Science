@@ -94,10 +94,10 @@ def pre_trained_word_embedding(df, model, review_column='review'):
     # Apply tokenization to each review
     df['tokens'] = df[review_column].apply(preprocess)
 
-    if model == "word2vec" or model == "fasttext":
+#     if model == "word2vec" or model == "fasttext":
 
-        # Apply the function to each review for Word2Vec
-        df['vector'] = df['tokens'].apply(lambda tokens: get_review_vector(model, tokens))
+    # Apply the function to each review for Word2Vec
+    df['vector'] = df['tokens'].apply(lambda tokens: get_review_vector(model, tokens))
 
     return df[['review', 'vector', 'sentiment_encoded']]
 
@@ -130,3 +130,6 @@ def vectorization(df, vectorizer, review_column='cleaned_review', pretrained=Fal
     df['vector'] = df_counts.values.tolist()
     return df[['review', 'vector', 'sentiment_encoded']]
 
+
+    
+    
