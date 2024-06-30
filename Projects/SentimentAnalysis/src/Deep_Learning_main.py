@@ -26,14 +26,15 @@ def preprocess_data(df):
     # Pad the sequences to the same length
     X_train_pad = pad_sequences(X_train_seq, maxlen=maxlen)
     X_test_pad = pad_sequences(X_test_seq, maxlen=maxlen)
-    return X_train_pad, X_test_pad, y_train, y_test, label_encoder, maxlen
+    vocab_size = max([item for sublist in X_train_seq for item in sublist])
+    return X_train_pad, X_test_pad, y_train, y_test, label_encoder, vocab_size
 
 
-def model_def_and_compile(model_name, maxlen):
+def model_def_and_compile(model_name, vocab_size):
     
     # Define the model
     model = Sequential()
-    model.add(Embedding(input_dim=maxlen+1, output_dim=100))
+    model.add(Embedding(input_dim=vocab_size+1, output_dim=100))
     model.add(BatchNormalization())
     
     if model_name == "LSTM":
@@ -71,11 +72,11 @@ if __name__ == '__main__':
     
     # Load preprocessed data
     df = pd.read_excel(processed_file_path)
-    X_train_pad, X_test_pad, y_train, y_test, label_encoder, maxlen = preprocess_data(df)
+    X_train_pad, X_test_pad, y_train, y_test, label_encoder, vocab_size = preprocess_data(df)
     
     results = []
     for model_name in model_names:
-        model = model_def_and_compile(model_name, maxlen)
+        model = model_def_and_compile(model_name, vocab_size)
         # Train the model
         model.fit(X_train_pad, y_train, epochs=5, batch_size=32)
         
