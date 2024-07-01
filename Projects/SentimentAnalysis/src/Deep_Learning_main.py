@@ -56,10 +56,11 @@ def model_def_and_compile(model_name, vocab_size):
 def predict_sentiment(model, X_test_pad, y_test):
 
     y_pred = model.predict(X_test_pad)
-    accuracy = accuracy_score(y_test, y_pred)
-    precision = precision_score(y_test, y_pred)
-    recall = recall_score(y_test, y_pred)
-    f1 = f1_score(y_test, y_pred)
+    y_pred_binary = [1 if pred >= 0.5 else 0 for pred in y_pred]
+    accuracy = accuracy_score(y_test, y_pred_binary)
+    precision = precision_score(y_test, y_pred_binary)
+    recall = recall_score(y_test, y_pred_binary)
+    f1 = f1_score(y_test, y_pred_binary)
     
     return accuracy, precision, recall, f1
 
@@ -78,7 +79,7 @@ if __name__ == '__main__':
     for model_name in model_names:
         model = model_def_and_compile(model_name, vocab_size)
         # Train the model
-        model.fit(X_train_pad, y_train, epochs=5, batch_size=32)
+        model.fit(X_train_pad, y_train, epochs=5, batch_size=200)
         
         accuracy, precision, recall, f1  = predict_sentiment(model, X_test_pad, y_test)
         results.append([model_name, accuracy, precision, recall, f1])
