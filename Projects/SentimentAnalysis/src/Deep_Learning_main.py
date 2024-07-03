@@ -82,6 +82,7 @@ if __name__ == '__main__':
         model.fit(X_train_pad, y_train, epochs=5, batch_size=200)
         
         accuracy, precision, recall, f1  = predict_sentiment(model, X_test_pad, y_test)
+        print(model_name, accuracy, precision, recall, f1)
         results.append([model_name, accuracy, precision, recall, f1])
         
     df_summary = pd.DataFrame(results, columns=['model_name', 'accuracy', 'precision', 'recall', 'f1'])
