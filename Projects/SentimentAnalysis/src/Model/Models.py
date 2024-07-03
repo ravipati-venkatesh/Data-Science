@@ -72,13 +72,15 @@ def fit_models(X_train, y_train, model_name, vect_name):
         # Gaussian Naive Bayes does not have parameters to tune
         pass
 
-    # Perform GridSearchCV
-    grid_search = GridSearchCV(models[model_name], param_grid, cv=5, scoring='accuracy')
-    grid_search.fit(X_train, y_train)
+#     # Perform GridSearchCV
+#     grid_search = GridSearchCV(models[model_name], param_grid, cv=5, scoring='accuracy')
+#     grid_search.fit(X_train, y_train)
 
-    # Get best model
-    best_model = grid_search.best_estimator_
-
+#     # Get best model
+#     best_model = grid_search.best_estimator_
+    best_model = models[model_name]
+    best_model.fit(X_train, y_train)
+    
     # Save best model to file
     model_filename = f'./Model/BestModels/best_{model_name.lower().replace(" ", "_")}_{vect_name}_model.pkl'
     joblib.dump(best_model, model_filename)
@@ -93,6 +95,7 @@ def predict_models_summary(X_test, y_test, model_name, vect_name):
     # evaluate models
     model_filename = f'./Model/BestModels/best_{model_name.lower().replace(" ", "_")}_{vect_name}_model.pkl'
     model = joblib.load(model_filename)
+
     y_pred = model.predict(X_test)
     accuracy = accuracy_score(y_test, y_pred)
     f1 = f1_score(y_test, y_pred, average='weighted')
