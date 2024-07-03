@@ -45,6 +45,7 @@ def model_def_and_compile(model_name, vocab_size):
         model.add(SimpleRNN(100, dropout=0.2, recurrent_dropout=0.2, return_sequences=False))
         
     model.add(BatchNormalization())
+    model.add(Dropout(0.5))
     model.add(Dense(1, activation='sigmoid'))
     
     # Compile the model
@@ -79,8 +80,8 @@ if __name__ == '__main__':
     for model_name in model_names:
         model = model_def_and_compile(model_name, vocab_size)
         # Train the model
-        model.fit(X_train_pad, y_train, epochs=5, batch_size=200)
-        
+        model.fit(X_train_pad, y_train, epochs=5, batch_size=200, validation_data=(X_test_pad, y_test))
+
         accuracy, precision, recall, f1  = predict_sentiment(model, X_test_pad, y_test)
         print(model_name, accuracy, precision, recall, f1)
         results.append([model_name, accuracy, precision, recall, f1])
