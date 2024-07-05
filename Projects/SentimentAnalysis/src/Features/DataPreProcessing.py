@@ -9,6 +9,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from gensim.models import Word2Vec, FastText
 from gensim.models import KeyedVectors
 import spacy
+!python -m spacy download en_core_web_lg
 
 
 def preprocess_text(text):
