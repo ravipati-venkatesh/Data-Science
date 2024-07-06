@@ -62,7 +62,7 @@ bert_model.fit(
     x=dict(train_encodings),
     y=train_labels,
     epochs=3,
-    batch_size=16,
+    batch_size=512,
     validation_data=(dict(test_encodings), test_labels)
 )
 
@@ -89,7 +89,7 @@ roberta_model.fit(
     x=dict(train_encodings),
     y=train_labels,
     epochs=3,
-    batch_size=16,
+    batch_size=512,
     validation_data=(dict(test_encodings), test_labels)
 )
 
