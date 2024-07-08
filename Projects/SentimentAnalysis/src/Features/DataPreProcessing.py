@@ -9,6 +9,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from gensim.models import Word2Vec, FastText
 from gensim.models import KeyedVectors
 import spacy
+!python -m spacy download en_core_web_lg
 
 
 def preprocess_text(text):
@@ -31,6 +32,9 @@ def preprocess_text(text):
     # Initialize an empty list to hold the cleaned tokens
     cleaned_tokens = []
     
+    # Define custom stopwords excluding "not", "no", and "but"
+    stopwords = spacy.lang.en.stop_words.STOP_WORDS - {"not", "no", "but"}
+    
     for token in doc:
         # Filter out stop words, punctuation, and tokens with less than 2 characters, spaces, numbers
         if not token.is_stop and not token.is_punct and len(token.text) > 1 and not token.is_space and not token.like_num:
@@ -38,6 +42,7 @@ def preprocess_text(text):
             cleaned_tokens.append(token.lemma_)
     
     return cleaned_tokens
+
 
 
 def word_embedding(df, model, review_column='review'):

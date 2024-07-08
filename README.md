@@ -14,7 +14,6 @@ This repository contains implementations of various machine learning and deep le
 4. [Projects](#projects)
     - [Sentiment Analysis](#sentiment-analysis)
 5. [Usage](#usage)
-6. [License](#license)
 
 ---
 
@@ -69,13 +68,7 @@ This repository showcases implementations of various machine learning and deep l
 
 ## Projects
 
-### Sentiment Analysis
-
-1. **Using Machine Learning Models and Vectorizers**
-   - Implemented sentiment analysis using SVM, Naive Bayes, and various vectorization techniques (e.g., CountVectorizer, TF-IDF, Word2Vec, FastText).
-
-2. **Using Deep Learning Models**
-   - Implemented sentiment analysis using RNN, LSTM, GRU, and their bidirectional variants.
+### 1. Sentiment Analysis
 
 ---
 
@@ -85,5 +78,7 @@ To run any of the implementations, follow these steps:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/your-repository.git
-   cd your-repository
+   !git clone https://github.com/ravipati-venkatesh/Data-Science.git
+   cd Data-Science
+   
+
