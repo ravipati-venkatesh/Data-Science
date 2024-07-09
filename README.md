@@ -13,7 +13,7 @@ This repository contains implementations of various machine learning and deep le
     - [CNN and Autoencoders](#cnn-and-autoencoders)
 4. [Projects](#projects)
     - [Sentiment Analysis](#sentiment-analysis)
-5. [Usage](#usage)
+    - [Usage](#usage)
 
 ---
 
@@ -94,9 +94,7 @@ This repository showcases implementations of various machine learning and deep l
    - These models accuracies ranging from 92% to 95%
    - **Recommendations**: Based on these results transformer based Models outperforms all the other models.
 
----
-
-## Usage
+### Usage
 
 To run any of the implementations, follow these steps:
 
