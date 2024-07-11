@@ -45,7 +45,7 @@ bert_model.compile(optimizer=optimizer, loss=loss, metrics=metrics)
 bert_model.fit(
     x=dict(train_encodings),
     y=train_labels,
-    epochs=3,
+    epochs=2,
     batch_size=256,
     validation_data=(dict(test_encodings), test_labels)
 )
@@ -74,7 +74,7 @@ roberta_model.compile(optimizer=optimizer, loss=loss, metrics=metrics)
 roberta_model.fit(
     x=dict(train_encodings),
     y=train_labels,
-    epochs=3,
+    epochs=2,
     batch_size=256,
     validation_data=(dict(test_encodings), test_labels)
 )
