@@ -8,6 +8,7 @@
 # from langchain.llms import GooglePalm
 import os
 import pandas as pd
+import time
 from dotenv import load_dotenv
 from langchain import HuggingFaceHub
 from langchain.chains import LLMChain
@@ -72,10 +73,20 @@ def classify_review(review_):
     result = chain.run(text=review_)
     return result.strip().lower()
 
-# Apply the classification function to the DataFrame
-df_test['predicted_sentiment'] = df_test['review'].apply(classify_review)
+accuracy_list = []
 
+for i in range(0, len(df_test), 50):
+    batch_df = df_test.iloc[i:i+50]
+    batch_df['predicted_sentiment'] = batch_df['review'].apply(classify_review)
+    
+    batch_accuracy = batch_df[batch_df['sentiment'] == batch_df['predicted_sentiment']].shape[0] / batch_df.shape[0]
+    accuracy_list.append(batch_accuracy)
+    
+    print(f"Batch {i//50 + 1} accuracy: {batch_accuracy}")
+    
+    # Pause for a few seconds to avoid HTTP limit errors
+    time.sleep(2)
 
-accuracy = df_test[df_test['sentiment']==df_test['predicted_sentiment']].shape[0]/df_test.shape[0]
-
-print(accuracy)
+# Calculate overall accuracy
+overall_accuracy = sum(accuracy_list) / len(accuracy_list)
+print(f"Overall accuracy: {overall_accuracy}")
