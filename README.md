@@ -13,7 +13,8 @@ This repository contains implementations of various machine learning and deep le
     - [CNN and Autoencoders](#cnn-and-autoencoders)
 4. [Projects](#projects)
     - [Sentiment Analysis](#sentiment-analysis)
-    - [Usage](#usage)
+    - [Question Answering Application](#question-answering-application)
+
 
 ---
 
@@ -69,7 +70,7 @@ This repository showcases implementations of various machine learning and deep l
 
 # Projects
 
-## Sentiment Analysis (Project 1)
+## Sentiment Analysis
 
 1. **Using Machine Learning Models and Vectorizers**
    - Implemented sentiment analysis using SVM, Naive Bayes, and various vectorization techniques (e.g., CountVectorizer, TF-IDF, Word2Vec, FastText).
@@ -134,7 +135,7 @@ To run any of the implementations, follow these steps:
 - **Scikit-Learn**: A comprehensive library for machine learning in Python.
 - **Multiprocessing**: Provides support for concurrent execution of code using processes.
 
-## Question Answering Application (Project 2)
+## Question Answering Application
 
 This application processes articles from URLs, splits the text into chunks, generates embeddings, creates a vector database, and answers user questions based on the provided context using a language model.
 
